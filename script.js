@@ -62,7 +62,10 @@ function updateSheet(sheetName, selectedValue) {
         .then(data => {
             console.log("Successfully updated sheet with selected value:", data);
         })
-        .catch(error => console.error("Error updating sheet:", error));
+        .catch(error => {
+            console.error("Error updating sheet:", error);
+            alert("There was an error updating the sheet. Please check the console for details.");
+        });
 }
 
 // Function to toggle between Weekly Budget, Monthly Budget, and Forms
