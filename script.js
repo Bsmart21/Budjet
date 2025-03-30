@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 function fetchDropdownOptions(sheetName, range, dropdownId) {
-    const url = `https://script.google.com/macros/s/AKfycbwgNZ3IE4VmPfab1nUZr1X23nnAuBKntaJ-bi0Lxu_nPlamV_24gq2N8Qu5NpwGM4rZ/exec?sheet=${sheetName}&range=${range}`;
+    const url = `https://script.google.com/macros/s/AKfycbwgNZ3IE4VmPfab1nUZr1X23nnAuBKntaJ-bi0Lxu_nPlamV_24gq2N8Qu5NpwGM4rZ/exec?sheet=${sheetName}&range=${encodeURIComponent(range)}`;
 
     fetch(url)
         .then(response => response.json())
@@ -19,6 +19,7 @@ function fetchDropdownOptions(sheetName, range, dropdownId) {
                 dropdown.appendChild(opt);
             });
 
+            // Load data once dropdown options are fetched
             updateSheet(dropdownId === "weeklyDropdown" ? "Entry" : "month");
         })
         .catch(error => console.error("Error fetching dropdown options:", error));
@@ -36,7 +37,7 @@ function updateSheet(sheetName) {
             let tableBody = document.getElementById(tableBodyId);
             tableBody.innerHTML = "";
 
-            if (data.length === 0) {
+            if (!data || data.length === 0) {
                 tableBody.innerHTML = "<tr><td colspan='3'>No data available</td></tr>";
                 return;
             }
@@ -46,12 +47,9 @@ function updateSheet(sheetName) {
                 row.forEach((cell, index) => {
                     let td = document.createElement("td");
 
-                    // Format columns B & C as currency
+                    // Ensure column B (index 1) and column C (index 2) are formatted as currency
                     if (index === 1 || index === 2) {
-                        td.textContent = new Intl.NumberFormat("en-US", {
-                            style: "currency",
-                            currency: "USD"
-                        }).format(cell);
+                        td.textContent = formatCurrency(cell);
                     } else {
                         td.textContent = cell;
                     }
@@ -62,4 +60,11 @@ function updateSheet(sheetName) {
             });
         })
         .catch(error => console.error("Error fetching data:", error));
+}
+
+// Function to format currency values
+function formatCurrency(value) {
+    let num = parseFloat(value);
+    if (isNaN(num)) return value; // Return original if not a number
+    return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(num);
 }
