@@ -63,7 +63,7 @@ function updateSheet(sheetName) {
         return;
     }
 
-    const url = `https://script.google.com/macros/s/AKfycbxK-Wcs06ypiY74sRnhnVgGslOiMHNvI3Azl-la_Ibw9fBSyKHvFysMlhq_CtICdIzl/exec?sheet=${sheetName}&value=${encodeURIComponent(selectedOption)}`;
+    const url = `https://script.google.com/macros/s/AKfycbzZyNoPwtpsySGTdmW4l9ZgclcVBH33zzms4X5LOUzhRMRyr5_W_tPKnNPZXj2I3sn0/exec?sheet=${sheetName}&value=${encodeURIComponent(selectedOption)}`;
 
     fetch(url)
         .then(response => response.json())
