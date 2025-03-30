@@ -4,95 +4,55 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Budget Dashboard</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            margin: 20px;
-        }
-        select {
-            padding: 10px;
-            margin: 10px;
-            font-size: 16px;
-        }
-        iframe {
-            width: 100%;
-            height: 600px;
-            border: none;
-            display: none;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        th, td {
-            border: 1px solid black;
-            padding: 8px;
-            text-align: left;
-        }
-        th {
-            background-color: #f4f4f4;
-        }
-        @media (max-width: 600px) {
-            select {
-                font-size: 14px;
-                padding: 8px;
-            }
-            table {
-                font-size: 14px;
-            }
-        }
-    </style>
+    <script src="script.js" defer></script>
 </head>
 <body>
 
-    <h2>Budget Dashboard</h2>
+    <h1>Budget Dashboard</h1>
 
-    <label for="viewSelector">Select a View:</label>
-    <select id="viewSelector" onchange="switchView()">
+    <!-- View Selector Dropdown -->
+    <select id="viewSelector">
         <option value="weekly">Weekly Budget</option>
         <option value="monthly">Monthly Budget</option>
-        <option value="form1">Enter Transaction</option>
-        <option value="form2">Enter Budgets</option>
+        <option value="transaction">Enter Transaction</option>
+        <option value="budgets">Enter Budgets</option>
     </select>
 
-    <!-- Weekly Budget -->
-    <div id="weeklyView">
-        <label for="weeklyDropdown">Select a Week:</label>
-        <select id="weeklyDropdown" onchange="updateSheet('Entry')"></select>
+    <!-- Weekly Budget Section -->
+    <div id="weekly-budget">
+        <h2>Weekly Budget</h2>
+        <select id="weeklyDropdown"></select>
         <table>
             <thead>
-                <tr>
-                    <th>Category</th>
-                    <th>Amount</th>
-                    <th>Notes</th>
-                </tr>
+                <tr><th>Date</th><th>Amount</th><th>Category</th></tr>
             </thead>
             <tbody id="weekly-table-body"></tbody>
         </table>
     </div>
 
-    <!-- Monthly Budget -->
-    <div id="monthlyView">
-        <label for="monthlyDropdown">Select a Month:</label>
-        <select id="monthlyDropdown" onchange="updateSheet('month')"></select>
+    <!-- Monthly Budget Section -->
+    <div id="monthly-budget">
+        <h2>Monthly Budget</h2>
+        <select id="monthlyDropdown"></select>
         <table>
             <thead>
-                <tr>
-                    <th>Category</th>
-                    <th>Amount</th>
-                    <th>Notes</th>
-                </tr>
+                <tr><th>Month</th><th>Amount</th><th>Category</th></tr>
             </thead>
             <tbody id="monthly-table-body"></tbody>
         </table>
     </div>
 
-    <!-- Google Forms -->
-    <iframe id="form1View" src="https://docs.google.com/forms/d/e/1FAIpQLSd7E722SXLcVjUcSzASMeYfW1ZjRC-HVBp8EpSctxMrqJPAUw/viewform"></iframe>
-    <iframe id="form2View" src="https://docs.google.com/forms/d/e/1FAIpQLSfA3abugtBWzuurMlBeMjVjjVDld645j_MGsS08xOORC041hw/viewform"></iframe>
+    <!-- Enter Transaction Form -->
+    <div id="enter-transaction">
+        <h2>Enter Transaction</h2>
+        <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSd7E722SXLcVjUcSzASMeYfW1ZjRC-HVBp8EpSctxMrqJPAUw/viewform" width="100%" height="600px"></iframe>
+    </div>
 
-    <script src="script.js"></script>
+    <!-- Enter Budgets Form -->
+    <div id="enter-budgets">
+        <h2>Enter Budgets</h2>
+        <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSfA3abugtBWzuurMlBeMjVjjVDld645j_MGsS08xOORC041hw/viewform" width="100%" height="600px"></iframe>
+    </div>
+
 </body>
 </html>
