@@ -1,10 +1,10 @@
 document.addEventListener("DOMContentLoaded", function () {
-    fetchDropdownOptions("Entry", "weeklyDropdown");
-    fetchDropdownOptions("month", "monthlyDropdown");
+    fetchDropdownOptions("DropdownOptions", "B2:B59", "weeklyDropdown");
+    fetchDropdownOptions("DropdownOptions", "C1:C12", "monthlyDropdown");
 });
 
-function fetchDropdownOptions(sheetName, dropdownId) {
-    const url = `https://script.google.com/macros/s/AKfycbwgNZ3IE4VmPfab1nUZr1X23nnAuBKntaJ-bi0Lxu_nPlamV_24gq2N8Qu5NpwGM4rZ/exec?sheet=${sheetName}&dropdown=true`;
+function fetchDropdownOptions(sheetName, range, dropdownId) {
+    const url = `https://script.google.com/macros/s/AKfycbwgNZ3IE4VmPfab1nUZr1X23nnAuBKntaJ-bi0Lxu_nPlamV_24gq2N8Qu5NpwGM4rZ/exec?sheet=${sheetName}&range=${range}`;
 
     fetch(url)
         .then(response => response.json())
@@ -19,7 +19,7 @@ function fetchDropdownOptions(sheetName, dropdownId) {
                 dropdown.appendChild(opt);
             });
 
-            updateSheet(sheetName);
+            updateSheet(dropdownId === "weeklyDropdown" ? "Entry" : "month");
         })
         .catch(error => console.error("Error fetching dropdown options:", error));
 }
@@ -43,22 +43,23 @@ function updateSheet(sheetName) {
 
             data.forEach(row => {
                 let tr = document.createElement("tr");
-                row.forEach(cell => {
+                row.forEach((cell, index) => {
                     let td = document.createElement("td");
-                    td.textContent = cell;
+
+                    // Format columns B & C as currency
+                    if (index === 1 || index === 2) {
+                        td.textContent = new Intl.NumberFormat("en-US", {
+                            style: "currency",
+                            currency: "USD"
+                        }).format(cell);
+                    } else {
+                        td.textContent = cell;
+                    }
+
                     tr.appendChild(td);
                 });
                 tableBody.appendChild(tr);
             });
         })
         .catch(error => console.error("Error fetching data:", error));
-}
-
-function switchView() {
-    const selectedView = document.getElementById("viewSelector").value;
-
-    document.getElementById("weeklyView").style.display = selectedView === "weekly" ? "block" : "none";
-    document.getElementById("monthlyView").style.display = selectedView === "monthly" ? "block" : "none";
-    document.getElementById("form1View").style.display = selectedView === "form1" ? "block" : "none";
-    document.getElementById("form2View").style.display = selectedView === "form2" ? "block" : "none";
 }
