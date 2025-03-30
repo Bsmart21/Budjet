@@ -18,16 +18,21 @@ document.addEventListener("DOMContentLoaded", function () {
         "3/20/2026", "3/27/2026", "4/3/2026"
     ];
 
+    // Debug log: Checking if the page loaded correctly
+    console.log("Page loaded. Populating dropdowns...");
+
     // Populate dropdown options for both weekly and monthly budget sections
     populateDropdownOptions("monthlyDropdown", monthOptions);
     populateDropdownOptions("weeklyDropdown", entryOptions);
 
     // Add event listeners for dropdown changes
     document.getElementById("weeklyDropdown").addEventListener("change", function () {
+        console.log("Weekly dropdown changed to:", this.value);
         updateSheet("Entry");
     });
 
     document.getElementById("monthlyDropdown").addEventListener("change", function () {
+        console.log("Monthly dropdown changed to:", this.value);
         updateSheet("month");
     });
 
@@ -43,6 +48,15 @@ document.addEventListener("DOMContentLoaded", function () {
 // Function to populate dropdown options
 function populateDropdownOptions(dropdownId, options) {
     const dropdown = document.getElementById(dropdownId);
+
+    // Debug log: Check if dropdown is found
+    if (!dropdown) {
+        console.error(`Dropdown with ID "${dropdownId}" not found!`);
+        return;
+    }
+
+    console.log(`Populating dropdown with ID "${dropdownId}"`);
+
     dropdown.innerHTML = "";  // Clear any existing options
 
     if (options.length === 0) {
