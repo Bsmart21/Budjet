@@ -3,95 +3,96 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard & Google Form</title>
-    <script defer src="script.js"></script>
+    <title>Budget Dashboard</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             text-align: center;
             margin: 20px;
+        }
+        select {
             padding: 10px;
-            background-color: #f4f4f4;
-        }
-
-        /* Buttons */
-        .btn-container {
-            margin-bottom: 20px;
-        }
-
-        .btn {
-            padding: 10px 20px;
-            cursor: pointer;
-            border: none;
-            background-color: #007bff;
-            color: white;
+            margin: 10px;
             font-size: 16px;
-            font-weight: bold;
-            border-radius: 5px;
-            margin: 5px;
         }
-
-        .btn:hover {
-            background-color: #0056b3;
-        }
-
-        /* Content Sections */
-        .content {
+        iframe {
+            width: 100%;
+            height: 600px;
+            border: none;
             display: none;
         }
-
-        .content.active {
-            display: block;
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
         }
-
-        /* Responsive Table */
-        .table-container {
-            overflow-x: auto;
-            max-width: 100%;
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        @media (max-width: 600px) {
+            select {
+                font-size: 14px;
+                padding: 8px;
+            }
+            table {
+                font-size: 14px;
+            }
         }
     </style>
 </head>
 <body>
 
-    <!-- Buttons to switch views -->
-    <div class="btn-container">
-        <button class="btn" onclick="showSection('dashboard')">Show Dashboard</button>
-        <button class="btn" onclick="showSection('form')">Show Google Form</button>
+    <h2>Budget Dashboard</h2>
+
+    <label for="viewSelector">Select a View:</label>
+    <select id="viewSelector" onchange="switchView()">
+        <option value="weekly">Weekly Budget</option>
+        <option value="monthly">Monthly Budget</option>
+        <option value="form1">Enter Transaction</option>
+        <option value="form2">Enter Budgets</option>
+    </select>
+
+    <!-- Weekly Budget -->
+    <div id="weeklyView">
+        <label for="weeklyDropdown">Select a Week:</label>
+        <select id="weeklyDropdown" onchange="updateSheet('Entry')"></select>
+        <table>
+            <thead>
+                <tr>
+                    <th>Category</th>
+                    <th>Amount</th>
+                    <th>Notes</th>
+                </tr>
+            </thead>
+            <tbody id="weekly-table-body"></tbody>
+        </table>
     </div>
 
-    <!-- Dashboard Section -->
-    <div id="dashboard" class="content active">
-        <h1>Google Sheets Dashboard</h1>
-        <label for="dashboardDropdown">Select Date:</label>
-        <select id="dashboardDropdown" onchange="updateSheet()">
-            <option value="2/23/2025">2/23/2025</option>
-            <option value="3/2/2025">3/2/2025</option>
-            <!-- Add more options as needed -->
-        </select>
-        <div class="table-container">
-            <table>
-                <thead>
-                    <tr id="header-row"></tr>
-                </thead>
-                <tbody id="table-body"></tbody>
-            </table>
-        </div>
+    <!-- Monthly Budget -->
+    <div id="monthlyView">
+        <label for="monthlyDropdown">Select a Month:</label>
+        <select id="monthlyDropdown" onchange="updateSheet('month')"></select>
+        <table>
+            <thead>
+                <tr>
+                    <th>Category</th>
+                    <th>Amount</th>
+                    <th>Notes</th>
+                </tr>
+            </thead>
+            <tbody id="monthly-table-body"></tbody>
+        </table>
     </div>
 
-    <!-- Google Form Section -->
-    <div id="form" class="content">
-        <h1>Submit Your Response</h1>
-        <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSd7E722SXLcVjUcSzASMeYfW1ZjRC-HVBp8EpSctxMrqJPAUw/viewform?embedded=true" width="100%" height="600px" frameborder="0"></iframe>
-    </div>
+    <!-- Google Forms -->
+    <iframe id="form1View" src="https://docs.google.com/forms/d/e/1FAIpQLSd7E722SXLcVjUcSzASMeYfW1ZjRC-HVBp8EpSctxMrqJPAUw/viewform"></iframe>
+    <iframe id="form2View" src="https://docs.google.com/forms/d/e/1FAIpQLSfA3abugtBWzuurMlBeMjVjjVDld645j_MGsS08xOORC041hw/viewform"></iframe>
 
-    <script>
-        function showSection(sectionId) {
-            document.querySelectorAll('.content').forEach(section => {
-                section.classList.remove('active');
-            });
-            document.getElementById(sectionId).classList.add('active');
-        }
-    </script>
-
+    <script src="script.js"></script>
 </body>
 </html>
