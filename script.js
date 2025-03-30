@@ -54,24 +54,41 @@ function loadDropdownOptions(options, dropdownId) {
 }
 
 // Function to send the selected option to the Apps Script
-function updateSheet(sheetName, selectedValue) {
-    const url = `https://script.google.com/macros/s/AKfycbxK-Wcs06ypiY74sRnhnVgGslOiMHNvI3Azl-la_Ibw9fBSyKHvFysMlhq_CtICdIzl/exec?sheet=Entry&value=${encodeURIComponent(selectedOption)}`;
+function updateSheet(sheetName) {
+    // Determine the correct dropdown
+    const dropdownId = sheetName === "Entry" ? "weeklyDropdown" : "monthlyDropdown";
+    const selectedOption = document.getElementById(dropdownId).value; // Get selected value from the dropdown
+
+    const url = `https://script.google.com/macros/s/AKfycbxK-Wcs06ypiY74sRnhnVgGslOiMHNvI3Azl-la_Ibw9fBSyKHvFysMlhq_CtICdIzl/exec?sheet=${sheetName}&value=${encodeURIComponent(selectedOption)}`;
 
     fetch(url)
         .then(response => response.json())
         .then(data => {
-            console.log("Successfully updated sheet with selected value:", data);
-        })
-        .catch(error => {
-            console.error("Error updating sheet:", error);
-            alert("There was an error updating the sheet. Please check the console for details.");
-        });
-}
+            let tableBodyId = sheetName === "Entry" ? "weekly-table-body" : "monthly-table-body";
+            let tableBody = document.getElementById(tableBodyId);
+            tableBody.innerHTML = "";
 
-// Function to toggle between Weekly Budget, Monthly Budget, and Forms
-function toggleView(view) {
-    document.getElementById("weekly-budget").style.display = view === "weekly" ? "block" : "none";
-    document.getElementById("monthly-budget").style.display = view === "monthly" ? "block" : "none";
-    document.getElementById("enter-transaction").style.display = view === "transaction" ? "block" : "none";
-    document.getElementById("enter-budgets").style.display = view === "budgets" ? "block" : "none";
+            if (!data || data.length === 0) {
+                tableBody.innerHTML = "<tr><td colspan='3'>No data available</td></tr>";
+                return;
+            }
+
+            data.forEach(row => {
+                let tr = document.createElement("tr");
+                row.forEach((cell, index) => {
+                    let td = document.createElement("td");
+
+                    // Ensure column B (index 1) and column C (index 2) are formatted as currency
+                    if (index === 1 || index === 2) {
+                        td.textContent = formatCurrency(cell);
+                    } else {
+                        td.textContent = cell;
+                    }
+
+                    tr.appendChild(td);
+                });
+                tableBody.appendChild(tr);
+            });
+        })
+        .catch(error => console.error("Error updating sheet:", error));
 }
