@@ -13,12 +13,10 @@ document.addEventListener("DOMContentLoaded", function () {
         "2/8/2026", "2/15/2026", "2/22/2026", "3/1/2026", "3/8/2026",
         "3/15/2026", "3/22/2026", "3/29/2026"
     ];
-    
+
     const dropdown = document.getElementById("dashboardDropdown");
-    
-    // Clear existing options
-    dropdown.innerHTML = "";
-    
+    dropdown.innerHTML = ""; // Clear any existing options
+
     // Populate dropdown with dates
     dates.forEach(date => {
         let option = document.createElement("option");
@@ -26,4 +24,47 @@ document.addEventListener("DOMContentLoaded", function () {
         option.textContent = date;
         dropdown.appendChild(option);
     });
+
+    // Fetch initial data when the page loads (default to first date)
+    updateSheet();
 });
+
+// Fetch data from Google Sheets when a date is selected
+function updateSheet() {
+    const selectedDate = document.getElementById("dashboardDropdown").value;
+    const url = `https://script.google.com/macros/s/AKfycbwgNZ3IE4VmPfab1nUZr1X23nnAuBKntaJ-bi0Lxu_nPlamV_24gq2N8Qu5NpwGM4rZ/exec?date=${encodeURIComponent(selectedDate)}`;
+
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            let tableBody = document.getElementById("table-body");
+            tableBody.innerHTML = ""; // Clear old data
+
+            if (data.length === 0) {
+                console.log("No data found for this date.");
+                tableBody.innerHTML = "<tr><td colspan='3'>No data available</td></tr>";
+                return;
+            }
+
+            // Populate table with new data
+            data.forEach(row => {
+                let tr = document.createElement("tr");
+
+                row.forEach((cell, index) => {
+                    let td = document.createElement("td");
+
+                    // Format columns B & C as currency
+                    if (index === 1 || index === 2) {
+                        td.textContent = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(cell);
+                    } else {
+                        td.textContent = cell;
+                    }
+
+                    tr.appendChild(td);
+                });
+
+                tableBody.appendChild(tr);
+            });
+        })
+        .catch(error => console.error("Error fetching data:", error));
+}
