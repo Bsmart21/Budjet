@@ -55,7 +55,7 @@ function loadDropdownOptions(options, dropdownId) {
 
 // Function to send the selected option to the Apps Script
 function updateSheet(sheetName, selectedValue) {
-    const url = `https://script.google.com/macros/s/AKfycbyNfd81XsCjlzbDVEvEp_gHra-340lOJ_Um5o7nEjedmtlSeuBpweIyBqlQn0FwMpc4/exec?sheet=${sheetName}&value=${encodeURIComponent(selectedValue)}`;
+    const url = `https://script.google.com/macros/s/AKfycbxK-Wcs06ypiY74sRnhnVgGslOiMHNvI3Azl-la_Ibw9fBSyKHvFysMlhq_CtICdIzl/exec?sheet=Entry&value=${encodeURIComponent(selectedOption)}`;
 
     fetch(url)
         .then(response => response.json())
