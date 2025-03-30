@@ -22,11 +22,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Add event listeners for dropdown changes
     document.getElementById("weeklyDropdown").addEventListener("change", function () {
-        updateSheet("Entry");
+        updateSheet("Entry"); // Pass "Entry" for weekly budget
     });
 
     document.getElementById("monthlyDropdown").addEventListener("change", function () {
-        updateSheet("month");
+        updateSheet("month"); // Pass "month" for monthly budget
     });
 
     // Add event listener for menu selection
@@ -53,8 +53,15 @@ function loadDropdownOptions(dropdownId, options) {
 
 // Function to update the sheet data
 function updateSheet(sheetName) {
+    // Ensure the selectedOption is correctly retrieved from the dropdown
     const dropdownId = sheetName === "Entry" ? "weeklyDropdown" : "monthlyDropdown";
     const selectedOption = document.getElementById(dropdownId).value;
+
+    // Ensure that selectedOption is valid
+    if (!selectedOption) {
+        console.error("No option selected in the dropdown.");
+        return;
+    }
 
     const url = `https://script.google.com/macros/s/AKfycbxK-Wcs06ypiY74sRnhnVgGslOiMHNvI3Azl-la_Ibw9fBSyKHvFysMlhq_CtICdIzl/exec?sheet=${sheetName}&value=${encodeURIComponent(selectedOption)}`;
 
