@@ -67,7 +67,7 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
     }
  
-    const url = `https://script.google.com/macros/s/AKfycbzZyNoPwtpsySGTdmW4l9ZgclcVBH33zzms4X5LOUzhRMRyr5_W_tPKnNPZXj2I3sn0/exec?sheet=${sheetName}&value=${encodeURIComponent(selectedOption)}`;
+    const url = `https://script.google.com/macros/s/AKfycbyv0QplAk4MV1unhHAvyPErKRgwjd36_Ysksln0pgA6Pa7VOqXYBCF6G_m3_QeRfDn2/exec?sheet=${sheetName}&value=${encodeURIComponent(selectedOption)}`;
  
     fetch(url)
         .then(response => response.json())
