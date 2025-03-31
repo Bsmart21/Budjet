@@ -78,7 +78,7 @@ function updateSheet(sheetName) {
         return;
     }
 
-    const url = `https://script.google.com/macros/s/AKfycbzZyNoPwtpsySGTdmW4l9ZgclcVBH33zzms4X5LOUzhRMRyr5_W_tPKnNPZXj2I3sn0/exec?sheet=${sheetName}&value=${encodeURIComponent(selectedOption)}`;
+    const url = `https://script.google.com/macros/s/AKfycbxC3iF_4b9Why3JwluP-ZecVXGV7pzkHs8GGMiiOyggemagurcGtYHqqHEFIRgKViOE/exec?sheet=${sheetName}&value=${encodeURIComponent(selectedOption)}`;
 
     const tableBodyId = sheetName === "Entry" ? "weekly-table-body" : "monthly-table-body";
     const tableBody = document.getElementById(tableBodyId);
