@@ -1,31 +1,53 @@
-function doGet(e) {
-    if (!e || !e.parameter) {
-      return ContentService.createTextOutput("No parameters received").setMimeType(ContentService.MimeType.TEXT);
-    }
-  
-    var sheetName = e.parameter.sheet;
-    var value = e.parameter.value;
-  
-    if (!sheetName || !value) {
-      return ContentService.createTextOutput("Missing parameters").setMimeType(ContentService.MimeType.TEXT);
-    }
-  
-    var ss = SpreadsheetApp.openById("1nIyZG9sNpiq4PLA8L_LC_3q0dmkEY8QXuknWbozmoas");
-    var sheet = ss.getSheetByName(sheetName);
-    if (!sheet) {
-      return ContentService.createTextOutput("Sheet not found").setMimeType(ContentService.MimeType.TEXT);
-    }
-  
-    // Update cell B1
-    sheet.getRange("B1").setValue(value);
-  
-    // Get data from A3:C19
-    var data = sheet.getRange("A3:C19").getValues();
-  
-    // Convert empty cells to zero for formatting
-    data = data.map(row => row.map(cell => cell === "" ? 0 : cell));
-  
-    return ContentService.createTextOutput(JSON.stringify(data))
-      .setMimeType(ContentService.MimeType.JSON);
-  }
-  
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Budget Dashboard</title>
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <button id="monthBtn">Month</button>
+    <button id="weekBtn">Week</button>
+    <button id="enterBudgetBtn">Enter Budget</button>
+    <button id="enterTransactionBtn">Enter Transaction</button>
+
+    <select id="monthDropdown" style="display: none;">
+        <option value="March">March</option>
+        <option value="April">April</option>
+        <option value="May">May</option>
+        <option value="June">June</option>
+        <option value="July">July</option>
+        <option value="August">August</option>
+        <option value="September">September</option>
+        <option value="October">October</option>
+        <option value="November">November</option>
+        <option value="December">December</option>
+        <option value="January">January</option>
+        <option value="February">February</option>
+    </select>
+
+    <select id="weekDropdown" style="display: none;">
+        <option value="3/7/2025">3/7/2025</option>
+        <option value="3/14/2025">3/14/2025</option>
+        <option value="3/21/2025">3/21/2025</option>
+        <option value="3/28/2025">3/28/2025</option>
+        <option value="4/4/2025">4/4/2025</option>
+        <option value="4/11/2025">4/11/2025</option>
+        <option value="4/18/2025">4/18/2025</option>
+        <option value="4/25/2025">4/25/2025</option>
+        <option value="5/2/2025">5/2/2025</option>
+        <option value="5/9/2025">5/9/2025</option>
+        <option value="5/16/2025">5/16/2025</option>
+        <option value="5/23/2025">5/23/2025</option>
+        <option value="5/30/2025">5/30/2025</option>
+        <option value="6/6/2025">6/6/2025</option>
+        <option value="6/13/2025">6/13/2025</option>
+        <option value="6/20/2025">6/20/2025</option>
+        <option value="6/27/2025">6/27/2025</option>
+    </select>
+
+    <div id="tableContainer"></div>
+    <div id="formContainer" style="display: none; width: 100%; height: 600px;"></div>
+</body>
+</html>
