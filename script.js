@@ -20,26 +20,25 @@ document.addEventListener("DOMContentLoaded", function () {
         "August", "September", "October", "November", "December"
     ]);
  
- 
-    // Add event listeners for dropdown changes
-    document.getElementById("weeklyDropdown").addEventListener("change", function () {
-        updateSheet("Entry"); // Pass "Entry" for weekly budget
+    // Add event listeners for button clicks
+    document.getElementById("monthButton").addEventListener("click", function () {
+        toggleView("monthly"); // Show the Monthly Budget section
     });
  
- 
-    document.getElementById("monthlyDropdown").addEventListener("change", function () {
-        updateSheet("month"); // Pass "month" for monthly budget
+    document.getElementById("weekButton").addEventListener("click", function () {
+        toggleView("weekly"); // Show the Weekly Budget section
     });
  
- 
-    // Add event listener for menu selection
-    document.getElementById("viewSelector").addEventListener("change", function () {
-        toggleView(this.value);
+    document.getElementById("enterTransactionButton").addEventListener("click", function () {
+        toggleView("transaction"); // Show Enter Transaction form
     });
  
+    document.getElementById("enterBudgetButton").addEventListener("click", function () {
+        toggleView("budgets"); // Show Enter Budgets form
+    });
  
     // Initially hide all sections except the first selected one
-    toggleView(document.getElementById("viewSelector").value);
+    toggleView("weekly");
  });
  
  // Function to load dropdown options
@@ -55,71 +54,23 @@ document.addEventListener("DOMContentLoaded", function () {
     });
  }
  
- // Function to update the sheet data
- function updateSheet(sheetName) {
-    // Ensure the selectedOption is correctly retrieved from the dropdown
-    const dropdownId = sheetName === "Entry" ? "weeklyDropdown" : "monthlyDropdown";
-    const selectedOption = document.getElementById(dropdownId).value;
- 
-    // Ensure that selectedOption is valid
-    if (!selectedOption) {
-        console.error("No option selected in the dropdown.");
-        return;
-    }
- 
-    const url = `https://script.google.com/macros/s/AKfycbyAYn-_AR18nb-Gq-2qRdimYsCsQiwpVxH_9Td3WJ3wwJ4IAcjon1mN2N-7LslDWVQ/exec?sheet=${sheetName}&value=${encodeURIComponent(selectedOption)}`;
- 
-    fetch(url)
-        .then(response => response.json())
-        .then(data => {
-            let tableBodyId = sheetName === "Entry" ? "weekly-table-body" : "monthly-table-body";
-            let tableBody = document.getElementById(tableBodyId);
-            tableBody.innerHTML = ""; // Clear existing rows
- 
-            console.log("Fetched data:", data); // Debugging line
- 
-            if (!data || data.length === 0) {
-                tableBody.innerHTML = "<tr><td colspan='3'>No data available</td></tr>";
-                return;
-            }
- 
-            // Loop through each row and create table rows
-            data.forEach(row => {
-                if (row.length === 0) return; // Skip empty rows
- 
-                let tr = document.createElement("tr");
- 
-                row.forEach((cell, index) => {
-                    let td = document.createElement("td");
- 
-                    // Ensure column B (index 1) and column C (index 2) are formatted as currency
-                    if (index === 1 || index === 2) {
-                        td.textContent = formatCurrency(cell);
-                    } else {
-                        td.textContent = cell;
-                    }
- 
-                    tr.appendChild(td);
-                });
- 
-                tableBody.appendChild(tr);
-            });
-        })
-        .catch(error => console.error("Error updating sheet:", error));
- }
- 
- // Function to toggle between Weekly Budget, Monthly Budget, and Forms
+ // Function to toggle between sections based on button click
  function toggleView(view) {
-    document.getElementById("weekly-budget").style.display = view === "weekly" ? "block" : "none";
-    document.getElementById("monthly-budget").style.display = view === "monthly" ? "block" : "none";
-    document.getElementById("enter-transaction").style.display = view === "transaction" ? "block" : "none";
-    document.getElementById("enter-budgets").style.display = view === "budgets" ? "block" : "none";
- }
+    // Hide all sections
+    document.getElementById("weekly-budget").style.display = "none";
+    document.getElementById("monthly-budget").style.display = "none";
+    document.getElementById("enter-transaction").style.display = "none";
+    document.getElementById("enter-budgets").style.display = "none";
  
- // Function to format currency values
- function formatCurrency(value) {
-    let num = parseFloat(value);
-    if (isNaN(num)) return value; // Return original if not a number
-    return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(num);
+    // Show the selected section
+    if (view === "weekly") {
+        document.getElementById("weekly-budget").style.display = "block";
+    } else if (view === "monthly") {
+        document.getElementById("monthly-budget").style.display = "block";
+    } else if (view === "transaction") {
+        document.getElementById("enter-transaction").style.display = "block";
+    } else if (view === "budgets") {
+        document.getElementById("enter-budgets").style.display = "block";
+    }
  }
  

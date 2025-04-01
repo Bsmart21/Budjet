@@ -10,16 +10,14 @@
 
    <h1>Budget Dashboard</h1>
 
-   <!-- View Selector Dropdown -->
-   <select id="viewSelector">
-       <option value="weekly">Weekly Budget</option>
-       <option value="monthly">Monthly Budget</option>
-       <option value="transaction">Enter Transaction</option>
-       <option value="budgets">Enter Budgets</option>
-   </select>
+   <!-- Buttons instead of a dropdown -->
+   <button id="monthButton">Month</button>
+   <button id="weekButton">Week</button>
+   <button id="enterTransactionButton">Enter Transaction</button>
+   <button id="enterBudgetButton">Enter Budget</button>
 
    <!-- Weekly Budget Section -->
-   <div id="weekly-budget">
+   <div id="weekly-budget" style="display:none;">
        <h2>Weekly Budget</h2>
        <select id="weeklyDropdown"></select>
        <table>
@@ -31,7 +29,7 @@
    </div>
 
    <!-- Monthly Budget Section -->
-   <div id="monthly-budget">
+   <div id="monthly-budget" style="display:none;">
        <h2>Monthly Budget</h2>
        <select id="monthlyDropdown"></select>
        <table>
@@ -43,13 +41,13 @@
    </div>
 
    <!-- Enter Transaction Form -->
-   <div id="enter-transaction">
+   <div id="enter-transaction" style="display:none;">
        <h2>Enter Transaction</h2>
        <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSd7E722SXLcVjUcSzASMeYfW1ZjRC-HVBp8EpSctxMrqJPAUw/viewform" width="100%" height="600px"></iframe>
    </div>
 
    <!-- Enter Budgets Form -->
-   <div id="enter-budgets">
+   <div id="enter-budgets" style="display:none;">
        <h2>Enter Budgets</h2>
        <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSfA3abugtBWzuurMlBeMjVjjVDld645j_MGsS08xOORC041hw/viewform" width="100%" height="600px"></iframe>
    </div>
