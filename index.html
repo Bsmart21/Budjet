@@ -1,72 +1,118 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Budget Dashboard</title>
-    <style>
-        /* Styling for the modal */
-        #form-modal {
-            display: none;
-            position: fixed;
-            z-index: 1;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.4);
-            overflow: auto;
-        }
-        #form-iframe {
-            width: 80%;
-            height: 80%;
-            margin: 5% auto;
-            display: block;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Budget Dashboard</title>
 </head>
 <body>
-    <!-- Buttons for selecting Month, Week, etc. -->
-    <button id="monthButton">Month</button>
-    <button id="weekButton">Week</button>
-    <button id="enterTransactionButton">Enter Transaction</button>
-    <button id="enterBudgetButton">Enter Budget</button>
+  <h1>Budget Dashboard</h1>
 
-    <!-- Monthly Dropdown -->
-    <div id="monthly-budget" style="display:none;">
-        <select id="monthlyDropdown">
-            <option value="">Select a Month</option>
-        </select>
-    </div>
+  <!-- Buttons for selecting Month or Week -->
+  <div id="button-container">
+    <button id="monthBtn">Month</button>
+    <button id="weekBtn">Week</button>
+    <button id="enterBudgetBtn">Enter Budget</button>
+    <button id="enterTransactionBtn">Enter Transaction</button>
+  </div>
 
-    <!-- Weekly Dropdown -->
-    <div id="weekly-budget" style="display:none;">
-        <select id="weeklyDropdown">
-            <option value="">Select a Week</option>
-        </select>
-    </div>
+  <!-- Dropdown for Month selection -->
+  <div id="monthDropdownContainer" style="display: none;">
+    <select id="monthDropdown">
+      <option value="March">March</option>
+      <option value="April">April</option>
+      <option value="May">May</option>
+      <option value="June">June</option>
+      <option value="July">July</option>
+      <option value="August">August</option>
+      <option value="September">September</option>
+      <option value="October">October</option>
+      <option value="November">November</option>
+      <option value="December">December</option>
+      <option value="January">January</option>
+      <option value="February">February</option>
+    </select>
+  </div>
 
-    <!-- Table to display monthly data -->
-    <div id="monthly-table" style="display:none;">
-        <h3>Monthly Data</h3>
-        <table id="monthlyDataTable">
-            <tr><th>Month</th><th>Data 1</th><th>Data 2</th></tr>
-        </table>
-    </div>
+  <!-- Dropdown for Week selection -->
+  <div id="weekDropdownContainer" style="display: none;">
+    <select id="weekDropdown">
+      <option value="3/7/2025">3/7/2025</option>
+      <option value="3/14/2025">3/14/2025</option>
+      <option value="3/21/2025">3/21/2025</option>
+      <option value="3/28/2025">3/28/2025</option>
+      <option value="4/4/2025">4/4/2025</option>
+      <option value="4/11/2025">4/11/2025</option>
+      <option value="4/18/2025">4/18/2025</option>
+      <option value="4/25/2025">4/25/2025</option>
+      <option value="5/2/2025">5/2/2025</option>
+      <!-- Add all the week options as needed -->
+    </select>
+  </div>
 
-    <!-- Table to display weekly data -->
-    <div id="weekly-table" style="display:none;">
-        <h3>Weekly Data</h3>
-        <table id="weeklyDataTable">
-            <tr><th>Week</th><th>Data 1</th><th>Data 2</th></tr>
-        </table>
-    </div>
+  <!-- Tables to display the data -->
+  <table id="monthlyTable"></table>
+  <table id="weeklyTable"></table>
 
-    <!-- Modal for Google Forms -->
-    <div id="form-modal">
-        <iframe id="form-iframe" src="" frameborder="0"></iframe>
-    </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fetch/3.6.2/fetch.min.js"></script>
+  <script>
+    // Buttons handling
+    document.getElementById('monthBtn').addEventListener('click', () => {
+      document.getElementById('monthDropdownContainer').style.display = 'block';
+      document.getElementById('weekDropdownContainer').style.display = 'none';
+    });
 
-    <script src="script.js"></script>
+    document.getElementById('weekBtn').addEventListener('click', () => {
+      document.getElementById('weekDropdownContainer').style.display = 'block';
+      document.getElementById('monthDropdownContainer').style.display = 'none';
+    });
+
+    // Button handlers for forms (just opening Google Forms in a new tab)
+    document.getElementById('enterBudgetBtn').addEventListener('click', () => {
+      window.open('https://docs.google.com/forms/d/e/1FAIpQLSfA3abugtBWzuurMlBeMjVjjVDld645j_MGsS08xOORC041hw/viewform', '_blank');
+    });
+
+    document.getElementById('enterTransactionBtn').addEventListener('click', () => {
+      window.open('https://docs.google.com/forms/d/e/1FAIpQLSd7E722SXLcVjUcSzASMeYfW1ZjRC-HVBp8EpSctxMrqJPAUw/viewform', '_blank');
+    });
+
+    // Display data based on the dropdown selection (Month or Week)
+    document.getElementById('monthDropdown').addEventListener('change', function() {
+      const selectedMonth = this.value;
+      updateCellAndDisplayData('Month', selectedMonth);
+    });
+
+    document.getElementById('weekDropdown').addEventListener('change', function() {
+      const selectedWeek = this.value;
+      updateCellAndDisplayData('Entry', selectedWeek);
+    });
+
+    // Function to update the sheet and display the data in the table
+    function updateCellAndDisplayData(sheetName, selectedValue) {
+      const scriptURL = `https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec?sheet=${sheetName}&value=${selectedValue}`;
+
+      fetch(scriptURL)
+        .then(response => response.json())  // Parse the JSON response
+        .then(data => {
+          // Clear existing data
+          const table = (sheetName === "Month") ? document.getElementById("monthlyTable") : document.getElementById("weeklyTable");
+          table.innerHTML = ""; // Clear previous data
+
+          // Populate the table with new data
+          data.forEach(row => {
+            const tr = document.createElement("tr");
+            row.forEach(cell => {
+              const td = document.createElement("td");
+              td.textContent = cell;
+              tr.appendChild(td);
+            });
+            table.appendChild(tr);
+          });
+        })
+        .catch(error => {
+          console.error("Error fetching data:", error);
+        });
+    }
+  </script>
 </body>
 </html>
