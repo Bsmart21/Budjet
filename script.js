@@ -7,6 +7,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const dropdownContainer = document.getElementById("dropdownContainer");
     const dropdown = document.getElementById("dropdown");
     const dataContainer = document.getElementById("dataContainer");
+    const formContainer = document.getElementById("formContainer");
   
     let currentTitle = ""; // Stores the title (Monthly or Weekly Budget)
   
@@ -44,19 +45,29 @@ document.addEventListener("DOMContentLoaded", function () {
     monthBtn.addEventListener("click", function () {
       updateDropdown(monthOptions, "Monthly Budget");
       dropdown.dataset.sheet = "Month";
+      formContainer.style.display = "none";  // Hide form container when switching to budget data
     });
   
     weekBtn.addEventListener("click", function () {
       updateDropdown(weekOptions, "Weekly Budget");
       dropdown.dataset.sheet = "Entry";
+      formContainer.style.display = "none";  // Hide form container when switching to budget data
     });
   
     budgetBtn.addEventListener("click", function () {
-      window.location.href = "https://docs.google.com/forms/d/e/1FAIpQLSfA3abugtBWzuurMlBeMjVjjVDld645j_MGsS08xOORC041hw/viewform";  // Opens within the window
+      // Embed the Google Form within the dashboard
+      formContainer.style.display = "block";
+      formContainer.innerHTML = `<iframe src="https://docs.google.com/forms/d/e/1FAIpQLSfA3abugtBWzuurMlBeMjVjjVDld645j_MGsS08xOORC041hw/viewform" width="100%" height="800px" frameborder="0">Loading...</iframe>`;
+      dropdownContainer.style.display = "none";  // Hide dropdown when form is shown
+      dataContainer.innerHTML = ""; // Clear data container
     });
   
     transactionBtn.addEventListener("click", function () {
-      window.location.href = "https://docs.google.com/forms/d/e/1FAIpQLSd7E722SXLcVjUcSzASMeYfW1ZjRC-HVBp8EpSctxMrqJPAUw/viewform";  // Opens within the window
+      // Embed the Google Form within the dashboard
+      formContainer.style.display = "block";
+      formContainer.innerHTML = `<iframe src="https://docs.google.com/forms/d/e/1FAIpQLSd7E722SXLcVjUcSzASMeYfW1ZjRC-HVBp8EpSctxMrqJPAUw/viewform" width="100%" height="800px" frameborder="0">Loading...</iframe>`;
+      dropdownContainer.style.display = "none";  // Hide dropdown when form is shown
+      dataContainer.innerHTML = ""; // Clear data container
     });
   
     dropdown.addEventListener("change", function () {
