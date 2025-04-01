@@ -51,50 +51,44 @@ function toggleView(view) {
 function loadDropdown(type) {
     console.log(`Loading ${type} dropdown`);
     let dropdown;
-    let range;
-    let sheet;
+    let options;
 
     // Select the dropdown element based on type
     if (type === "month") {
         dropdown = document.getElementById("monthlyDropdown");
-        sheet = "month";
-        range = "A3:A19"; // Range for months
+        options = [
+            "3/7/2025", "3/14/2025", "3/21/2025", "3/28/2025",
+            "4/4/2025", "4/11/2025", "4/18/2025", "4/25/2025",
+            "5/2/2025", "5/9/2025", "5/16/2025", "5/23/2025", "5/30/2025",
+            "6/6/2025", "6/13/2025", "6/20/2025", "6/27/2025",
+            "7/4/2025", "7/11/2025", "7/18/2025", "7/25/2025",
+            "8/1/2025", "8/8/2025", "8/15/2025", "8/22/2025", "8/29/2025",
+            "9/5/2025", "9/12/2025", "9/19/2025", "9/26/2025",
+            "10/3/2025", "10/10/2025", "10/17/2025", "10/24/2025", "10/31/2025",
+            "11/7/2025", "11/14/2025", "11/21/2025", "11/28/2025",
+            "12/5/2025", "12/12/2025", "12/19/2025", "12/26/2025",
+            "1/2/2026", "1/9/2026", "1/16/2026", "1/23/2026", "1/30/2026",
+            "2/6/2026", "2/13/2026", "2/20/2026", "2/27/2026",
+            "3/6/2026", "3/13/2026", "3/20/2026", "3/27/2026"
+        ];
     } else if (type === "week") {
         dropdown = document.getElementById("weeklyDropdown");
-        sheet = "Entry";
-        range = "A3:A19"; // Range for weeks
+        options = [
+            "March", "April", "May", "June", "July", "August",
+            "September", "October", "November", "December",
+            "January", "February"
+        ];
     }
 
     // Clear existing options
     dropdown.innerHTML = "<option value=''>Select a " + type.charAt(0).toUpperCase() + type.slice(1) + "</option>";
 
-    // Fetch data from the Google Sheet
-    fetchDataFromSheet(sheet, range).then(data => {
-        // Populate the dropdown with options
-        data.forEach(item => {
-            const option = document.createElement("option");
-            option.value = item[0]; // Assuming the first column contains the value
-            option.text = item[0];  // Display the value in the dropdown
-            dropdown.appendChild(option);
-        });
-    }).catch(error => {
-        console.error("Error fetching data:", error);
-    });
-}
-
-// Function to fetch data from the Google Sheet
-function fetchDataFromSheet(sheetName, range) {
-    return new Promise((resolve, reject) => {
-        const url = `https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec?sheet=${sheetName}&range=${range}`;
-
-        fetch(url)
-            .then(response => response.json())
-            .then(data => {
-                resolve(data.values); // Resolve with the sheet data
-            })
-            .catch(error => {
-                reject(error); // Reject if there is an error
-            });
+    // Populate the dropdown with options
+    options.forEach(optionValue => {
+        const option = document.createElement("option");
+        option.value = optionValue; // Set the value of the option
+        option.text = optionValue;  // Set the displayed text of the option
+        dropdown.appendChild(option);
     });
 }
 
