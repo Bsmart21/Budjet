@@ -3,13 +3,13 @@ window.addEventListener('DOMContentLoaded', (event) => {
     document.getElementById("monthButton").addEventListener("click", function () {
         console.log("Month button clicked");
         toggleView("monthly"); // Show the Monthly Budget section
-        loadDropdown("month"); // Load the dropdown options for month
+        loadDropdown("week"); // Load the dropdown options for week (now week dates)
     });
 
     document.getElementById("weekButton").addEventListener("click", function () {
         console.log("Week button clicked");
         toggleView("weekly"); // Show the Weekly Budget section
-        loadDropdown("week"); // Load the dropdown options for week
+        loadDropdown("month"); // Load the dropdown options for month (now months)
     });
 
     // Event listener for Enter Transaction button
@@ -57,6 +57,13 @@ function loadDropdown(type) {
     if (type === "month") {
         dropdown = document.getElementById("monthlyDropdown");
         options = [
+            "March", "April", "May", "June", "July", "August",
+            "September", "October", "November", "December",
+            "January", "February"
+        ];
+    } else if (type === "week") {
+        dropdown = document.getElementById("weeklyDropdown");
+        options = [
             "3/7/2025", "3/14/2025", "3/21/2025", "3/28/2025",
             "4/4/2025", "4/11/2025", "4/18/2025", "4/25/2025",
             "5/2/2025", "5/9/2025", "5/16/2025", "5/23/2025", "5/30/2025",
@@ -70,13 +77,6 @@ function loadDropdown(type) {
             "1/2/2026", "1/9/2026", "1/16/2026", "1/23/2026", "1/30/2026",
             "2/6/2026", "2/13/2026", "2/20/2026", "2/27/2026",
             "3/6/2026", "3/13/2026", "3/20/2026", "3/27/2026"
-        ];
-    } else if (type === "week") {
-        dropdown = document.getElementById("weeklyDropdown");
-        options = [
-            "March", "April", "May", "June", "July", "August",
-            "September", "October", "November", "December",
-            "January", "February"
         ];
     }
 
