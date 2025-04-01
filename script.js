@@ -8,6 +8,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const dropdown = document.getElementById("dropdown");
     const dataContainer = document.getElementById("dataContainer");
   
+    let currentTitle = ""; // Stores the title (Monthly or Weekly Budget)
+  
     // Predefined dropdown options
     const monthOptions = [
       "March", "April", "May", "June", "July", "August",
@@ -27,7 +29,7 @@ document.addEventListener("DOMContentLoaded", function () {
       "2/20/2026", "2/27/2026", "3/6/2026", "3/13/2026", "3/20/2026", "3/27/2026"
     ];
   
-    function updateDropdown(options) {
+    function updateDropdown(options, title) {
       dropdown.innerHTML = "";
       options.forEach(option => {
         const opt = document.createElement("option");
@@ -36,15 +38,16 @@ document.addEventListener("DOMContentLoaded", function () {
         dropdown.appendChild(opt);
       });
       dropdownContainer.style.display = "block";
+      currentTitle = title; // Set title based on the button pressed
     }
   
     monthBtn.addEventListener("click", function () {
-      updateDropdown(monthOptions);
+      updateDropdown(monthOptions, "Monthly Budget");
       dropdown.dataset.sheet = "Month";
     });
   
     weekBtn.addEventListener("click", function () {
-      updateDropdown(weekOptions);
+      updateDropdown(weekOptions, "Weekly Budget");
       dropdown.dataset.sheet = "Entry";
     });
   
@@ -64,10 +67,29 @@ document.addEventListener("DOMContentLoaded", function () {
       fetch(`https://script.google.com/macros/s/AKfycbz6IL4D6Ygo71QrnfiG3E3sJtgajs-NqmI8byaKaElKyq1r3toxVdSpKsUBfKAH4_k/exec?sheet=${sheetName}&value=${selectedValue}`)
         .then(response => response.json())
         .then(data => {
-          dataContainer.innerHTML = "<h3>Data from Google Sheet:</h3>";
+          dataContainer.innerHTML = `<h2>${currentTitle}</h2>`;
+          
+          // Create a table
+          let table = `<table border="1" cellpadding="5" cellspacing="0">
+                        <thead>
+                          <tr>
+                            <th>Budget Item</th>
+                            <th>Cost</th>
+                            <th>Budget</th>
+                          </tr>
+                        </thead>
+                        <tbody>`;
+  
           data.forEach(row => {
-            dataContainer.innerHTML += `<p>${row.join(" | ")}</p>`;
+            table += `<tr>
+                        <td>${row[0]}</td>
+                        <td>${row[1]}</td>
+                        <td>${row[2]}</td>
+                      </tr>`;
           });
+  
+          table += `</tbody></table>`;
+          dataContainer.innerHTML += table;
         })
         .catch(error => console.error("Error fetching data:", error));
     });
