@@ -67,5 +67,38 @@ document.addEventListener("DOMContentLoaded", function () {
       fetch(`https://script.google.com/macros/s/AKfycbz6IL4D6Ygo71QrnfiG3E3sJtgajs-NqmI8byaKaElKyq1r3toxVdSpKsUBfKAH4_k/exec?sheet=${sheetName}&value=${selectedValue}`)
         .then(response => response.json())
         .then(data => {
-          dataContainer.innerHTML =
+          dataContainer.innerHTML = `<h2>${currentTitle}</h2>`;
+          
+          // Create a table
+          let table = `<table border="1" cellpadding="5" cellspacing="0">
+                        <thead>
+                          <tr>
+                            <th>Budget Item</th>
+                            <th>Cost</th>
+                            <th>Budget</th>
+                          </tr>
+                        </thead>
+                        <tbody>`;
+  
+          data.forEach(row => {
+            let cost = parseFloat(row[1]);
+            let budget = parseFloat(row[2]);
+  
+            // Format cost and budget as currency
+            cost = cost ? cost.toLocaleString('en-US', { style: 'currency', currency: 'USD' }) : '';
+            budget = budget ? budget.toLocaleString('en-US', { style: 'currency', currency: 'USD' }) : '';
+  
+            table += `<tr>
+                        <td>${row[0]}</td>
+                        <td>${cost}</td>
+                        <td>${budget}</td>
+                      </tr>`;
+          });
+  
+          table += `</tbody></table>`;
+          dataContainer.innerHTML += table;
+        })
+        .catch(error => console.error("Error fetching data:", error));
+    });
+  });
   
