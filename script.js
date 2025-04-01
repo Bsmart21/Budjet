@@ -85,16 +85,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Function to update Google Sheet and fetch new data
     function updateSheet(sheetName, value) {
-        let url = `https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec?sheet=${sheetName}&value=${encodeURIComponent(value)}`;
+        let url = `https://script.google.com/macros/s/AKfycbzJKGf3w1cHRFEPmjjG0zYAPL-MXsbLYcPFQLSgkgaL1hBUlmir9x0YuiIjkBcIl0tL/exec?sheet=${sheetName}&value=${encodeURIComponent(value)}`;
         
         fetch(url)
-            .then(response => response.json())
+            .then(response => response.json()) // Expecting JSON response
             .then(data => {
                 console.log("Data received:", data);
                 displayData(data);
             })
-            .catch(error => console.error("Error updating sheet:", error));
+            .catch(error => console.error("Error fetching data:", error));
     }
+    
 
     // Function to display data in table
     function displayData(data) {
