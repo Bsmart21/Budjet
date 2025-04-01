@@ -108,7 +108,7 @@ function loadDropdown(type) {
 function updateSheet(sheetName, selectedValue) {
     console.log(`Updating ${sheetName} sheet with selected value: ${selectedValue}`);
 
-    const scriptURL = `https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec?sheet=${sheetName}&value=${selectedValue}`;
+    const scriptURL = `https://script.google.com/macros/s/AKfycby2UEVzu_w3Ee0eVv2ITcB2a4NHS0HL2tb9PAiJboqTvLpGevt4jgmry5TK2I8FviNt/exec?sheet=${sheetName}&value=${selectedValue}`;
 
     fetch(scriptURL)
         .then(response => response.json())
