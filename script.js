@@ -108,7 +108,7 @@ function loadDropdown(type) {
 function updateSheet(sheetName, selectedValue) {
     console.log(`Updating ${sheetName} sheet with selected value: ${selectedValue}`);
 
-    const scriptURL = `https://script.google.com/macros/s/AKfycby2UEVzu_w3Ee0eVv2ITcB2a4NHS0HL2tb9PAiJboqTvLpGevt4jgmry5TK2I8FviNt/exec?sheet=${sheetName}&value=${selectedValue}`;
+    const scriptURL = `https://script.google.com/macros/s/AKfycbzph7JzuazAhhzGEM49l-K7ZFXYEiWA_2RiMafcc3kgTKd9rDX-aciCHNwtsnJS0aYy/exec?sheet=${sheetName}&value=${selectedValue}`;
 
     fetch(scriptURL)
         .then(response => response.json())
@@ -125,7 +125,7 @@ function displayData(sheetName) {
     console.log(`Displaying data from ${sheetName} sheet`);
 
     const sheetRange = (sheetName === "Month") ? "A3:C19" : "A3:C19";
-    const scriptURL = `https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec?sheet=${sheetName}&range=${sheetRange}`;
+    const scriptURL = `https://script.google.com/macros/s/AKfycbzph7JzuazAhhzGEM49l-K7ZFXYEiWA_2RiMafcc3kgTKd9rDX-aciCHNwtsnJS0aYy/exec?sheet=${sheetName}&range=${sheetRange}`;
 
     fetch(scriptURL)
         .then(response => response.json())
