@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", function () {
+window.onload = function () {
     // Load dropdown options for both weekly and monthly budget sections
     loadDropdownOptions("weeklyDropdown", [
         "3/7/2025", "3/14/2025", "3/21/2025", "3/28/2025", "4/4/2025",
@@ -14,54 +14,54 @@ document.addEventListener("DOMContentLoaded", function () {
         "2/20/2026", "2/27/2026", "3/6/2026", "3/13/2026", "3/20/2026",
         "3/27/2026", "4/3/2026"
     ]);
-   
+  
     loadDropdownOptions("monthlyDropdown", [
         "January", "February", "March", "April", "May", "June", "July",
         "August", "September", "October", "November", "December"
     ]);
- 
+
     // Add event listeners for button clicks
-    document.getElementById("monthButton")?.addEventListener("click", function () {
+    document.getElementById("monthButton").addEventListener("click", function () {
         toggleView("monthly"); // Show the Monthly Budget section
     });
- 
-    document.getElementById("weekButton")?.addEventListener("click", function () {
+
+    document.getElementById("weekButton").addEventListener("click", function () {
         toggleView("weekly"); // Show the Weekly Budget section
     });
- 
-    document.getElementById("enterTransactionButton")?.addEventListener("click", function () {
+
+    document.getElementById("enterTransactionButton").addEventListener("click", function () {
         toggleView("transaction"); // Show Enter Transaction form
     });
- 
-    document.getElementById("enterBudgetButton")?.addEventListener("click", function () {
+
+    document.getElementById("enterBudgetButton").addEventListener("click", function () {
         toggleView("budgets"); // Show Enter Budgets form
     });
- 
+
     // Initially hide all sections except the first selected one
     toggleView("weekly");
- });
- 
- // Function to load dropdown options
- function loadDropdownOptions(dropdownId, options) {
+};
+
+// Function to load dropdown options
+function loadDropdownOptions(dropdownId, options) {
     const dropdown = document.getElementById(dropdownId);
     dropdown.innerHTML = ""; // Clear existing options
- 
+
     options.forEach(option => {
         let opt = document.createElement("option");
         opt.value = option;
         opt.textContent = option;
         dropdown.appendChild(opt);
     });
- }
- 
- // Function to toggle between sections based on button click
- function toggleView(view) {
+}
+
+// Function to toggle between sections based on button click
+function toggleView(view) {
     // Hide all sections
     document.getElementById("weekly-budget").style.display = "none";
     document.getElementById("monthly-budget").style.display = "none";
     document.getElementById("enter-transaction").style.display = "none";
     document.getElementById("enter-budgets").style.display = "none";
- 
+
     // Show the selected section
     if (view === "weekly") {
         document.getElementById("weekly-budget").style.display = "block";
@@ -72,5 +72,4 @@ document.addEventListener("DOMContentLoaded", function () {
     } else if (view === "budgets") {
         document.getElementById("enter-budgets").style.display = "block";
     }
- }
- 
+}
