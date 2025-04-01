@@ -1,23 +1,13 @@
 window.onload = function () {
-    // Load dropdown options for both weekly and monthly budget sections
-    loadDropdownOptions("weeklyDropdown", [
-        "3/7/2025", "3/14/2025", "3/21/2025", "3/28/2025", "4/4/2025",
-        "4/11/2025", "4/18/2025", "4/25/2025", "5/2/2025", "5/9/2025",
-        "5/16/2025", "5/23/2025", "5/30/2025", "6/6/2025", "6/13/2025",
-        "6/20/2025", "6/27/2025", "7/4/2025", "7/11/2025", "7/18/2025",
-        "7/25/2025", "8/1/2025", "8/8/2025", "8/15/2025", "8/22/2025",
-        "8/29/2025", "9/5/2025", "9/12/2025", "9/19/2025", "9/26/2025",
-        "10/3/2025", "10/10/2025", "10/17/2025", "10/24/2025", "10/31/2025",
-        "11/7/2025", "11/14/2025", "11/21/2025", "11/28/2025", "12/5/2025",
-        "12/12/2025", "12/19/2025", "12/26/2025", "1/2/2026", "1/9/2026",
-        "1/16/2026", "1/23/2026", "1/30/2026", "2/6/2026", "2/13/2026",
-        "2/20/2026", "2/27/2026", "3/6/2026", "3/13/2026", "3/20/2026",
-        "3/27/2026", "4/3/2026"
-    ]);
-  
+    // Load dropdown options for months
     loadDropdownOptions("monthlyDropdown", [
         "January", "February", "March", "April", "May", "June", "July",
         "August", "September", "October", "November", "December"
+    ]);
+
+    // Load dropdown options for weeks
+    loadDropdownOptions("weeklyDropdown", [
+        "Week 1", "Week 2", "Week 3", "Week 4"
     ]);
 
     // Add event listeners for button clicks
@@ -29,28 +19,27 @@ window.onload = function () {
         toggleView("weekly"); // Show the Weekly Budget section
     });
 
-    document.getElementById("enterTransactionButton").addEventListener("click", function () {
-        toggleView("transaction"); // Show Enter Transaction form
+    // Add event listeners for dropdown changes (when a month is selected)
+    document.getElementById("monthlyDropdown").addEventListener("change", function () {
+        const selectedMonth = this.value;
+        if (selectedMonth) {
+            fetchMonthData(selectedMonth); // Fetch data for the selected month
+        }
     });
 
-    document.getElementById("enterBudgetButton").addEventListener("click", function () {
-        toggleView("budgets"); // Show Enter Budgets form
+    // Add event listeners for dropdown changes (when a week is selected)
+    document.getElementById("weeklyDropdown").addEventListener("change", function () {
+        const selectedWeek = this.value;
+        if (selectedWeek) {
+            fetchWeekData(selectedWeek); // Fetch data for the selected week
+        }
     });
 
     // Initially hide all sections except the first selected one
-    toggleView("weekly");
-
-    // Add event listeners to dropdowns for data display
-    document.getElementById("weeklyDropdown").addEventListener("change", function () {
-        displayWeekData(this.value);
-    });
-
-    document.getElementById("monthlyDropdown").addEventListener("change", function () {
-        displayMonthData(this.value);
-    });
+    toggleView("monthly");
 };
 
-// Function to load dropdown options
+// Function to load dropdown options (for months or weeks)
 function loadDropdownOptions(dropdownId, options) {
     const dropdown = document.getElementById(dropdownId);
     dropdown.innerHTML = ""; // Clear existing options
@@ -66,69 +55,85 @@ function loadDropdownOptions(dropdownId, options) {
 // Function to toggle between sections based on button click
 function toggleView(view) {
     // Hide all sections
-    document.getElementById("weekly-budget").style.display = "none";
     document.getElementById("monthly-budget").style.display = "none";
+    document.getElementById("weekly-budget").style.display = "none";
     document.getElementById("enter-transaction").style.display = "none";
     document.getElementById("enter-budgets").style.display = "none";
+    document.getElementById("monthly-table").style.display = "none";
+    document.getElementById("weekly-table").style.display = "none";
 
     // Show the selected section
-    if (view === "weekly") {
-        document.getElementById("weekly-budget").style.display = "block";
-    } else if (view === "monthly") {
+    if (view === "monthly") {
         document.getElementById("monthly-budget").style.display = "block";
-    } else if (view === "transaction") {
-        document.getElementById("enter-transaction").style.display = "block";
-    } else if (view === "budgets") {
-        document.getElementById("enter-budgets").style.display = "block";
+        document.getElementById("monthly-table").style.display = "block";
+    } else if (view === "weekly") {
+        document.getElementById("weekly-budget").style.display = "block";
+        document.getElementById("weekly-table").style.display = "block";
     }
 }
 
-// Function to display weekly data based on selection
-function displayWeekData(selectedWeek) {
-    const data = {
-        "3/7/2025": [
-            { date: "3/7/2025", amount: "$100", category: "Food" },
-            { date: "3/7/2025", amount: "$50", category: "Transport" },
-        ],
-        "3/14/2025": [
-            { date: "3/14/2025", amount: "$200", category: "Groceries" },
-            { date: "3/14/2025", amount: "$30", category: "Entertainment" },
-        ]
-    };
+// Fetch data from Google Sheets for the selected month
+function fetchMonthData(month) {
+    // Call the Google Apps Script to fetch data for the selected month
+    const url = `https://script.google.com/macros/s/AKfycby2UEVzu_w3Ee0eVv2ITcB2a4NHS0HL2tb9PAiJboqTvLpGevt4jgmry5TK2I8FviNt/exec?sheet=Month&month=${month}`;
+    
+    // Fetch data from the Google Apps Script
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            // Populate the table with the returned data
+            displayMonthData(data);
+        })
+        .catch(error => {
+            console.error("Error fetching month data:", error);
+        });
+}
 
-    const tableBody = document.getElementById("weekly-table-body");
+// Fetch data from Google Sheets for the selected week
+function fetchWeekData(week) {
+    // Call the Google Apps Script to fetch data for the selected week
+    const url = `https://script.google.com/macros/s/AKfycbzZyNoPwtpsySGTdmW4l9ZgclcVBH33zzms4X5LOUzhRMRyr5_W_tPKnNPZXj2I3sn0/exec?sheet=Entry&week=${week}`;
+    
+    // Fetch data from the Google Apps Script
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            // Populate the table with the returned data
+            displayWeekData(data);
+        })
+        .catch(error => {
+            console.error("Error fetching week data:", error);
+        });
+}
+
+// Function to display the fetched month data in the table
+function displayMonthData(data) {
+    const tableBody = document.getElementById("monthly-table-body");
     tableBody.innerHTML = ""; // Clear previous data
 
-    if (data[selectedWeek]) {
-        data[selectedWeek].forEach(row => {
+    if (data && data.length > 0) {
+        data.forEach(row => {
             const tr = document.createElement("tr");
             tr.innerHTML = `<td>${row.date}</td><td>${row.amount}</td><td>${row.category}</td>`;
             tableBody.appendChild(tr);
         });
+    } else {
+        tableBody.innerHTML = "<tr><td colspan='3'>No data available for this month.</td></tr>";
     }
 }
 
-// Function to display monthly data based on selection
-function displayMonthData(selectedMonth) {
-    const data = {
-        "January": [
-            { month: "January", amount: "$500", category: "Food" },
-            { month: "January", amount: "$200", category: "Transport" },
-        ],
-        "February": [
-            { month: "February", amount: "$600", category: "Groceries" },
-            { month: "February", amount: "$100", category: "Entertainment" },
-        ]
-    };
-
-    const tableBody = document.getElementById("monthly-table-body");
+// Function to display the fetched week data in the table
+function displayWeekData(data) {
+    const tableBody = document.getElementById("weekly-table-body");
     tableBody.innerHTML = ""; // Clear previous data
 
-    if (data[selectedMonth]) {
-        data[selectedMonth].forEach(row => {
+    if (data && data.length > 0) {
+        data.forEach(row => {
             const tr = document.createElement("tr");
-            tr.innerHTML = `<td>${row.month}</td><td>${row.amount}</td><td>${row.category}</td>`;
+            tr.innerHTML = `<td>${row.date}</td><td>${row.amount}</td><td>${row.category}</td>`;
             tableBody.appendChild(tr);
         });
+    } else {
+        tableBody.innerHTML = "<tr><td colspan='3'>No data available for this week.</td></tr>";
     }
 }
