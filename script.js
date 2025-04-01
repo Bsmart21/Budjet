@@ -39,6 +39,15 @@ window.onload = function () {
 
     // Initially hide all sections except the first selected one
     toggleView("weekly");
+
+    // Add event listeners to dropdowns for data display
+    document.getElementById("weeklyDropdown").addEventListener("change", function () {
+        displayWeekData(this.value);
+    });
+
+    document.getElementById("monthlyDropdown").addEventListener("change", function () {
+        displayMonthData(this.value);
+    });
 };
 
 // Function to load dropdown options
@@ -71,5 +80,55 @@ function toggleView(view) {
         document.getElementById("enter-transaction").style.display = "block";
     } else if (view === "budgets") {
         document.getElementById("enter-budgets").style.display = "block";
+    }
+}
+
+// Function to display weekly data based on selection
+function displayWeekData(selectedWeek) {
+    const data = {
+        "3/7/2025": [
+            { date: "3/7/2025", amount: "$100", category: "Food" },
+            { date: "3/7/2025", amount: "$50", category: "Transport" },
+        ],
+        "3/14/2025": [
+            { date: "3/14/2025", amount: "$200", category: "Groceries" },
+            { date: "3/14/2025", amount: "$30", category: "Entertainment" },
+        ]
+    };
+
+    const tableBody = document.getElementById("weekly-table-body");
+    tableBody.innerHTML = ""; // Clear previous data
+
+    if (data[selectedWeek]) {
+        data[selectedWeek].forEach(row => {
+            const tr = document.createElement("tr");
+            tr.innerHTML = `<td>${row.date}</td><td>${row.amount}</td><td>${row.category}</td>`;
+            tableBody.appendChild(tr);
+        });
+    }
+}
+
+// Function to display monthly data based on selection
+function displayMonthData(selectedMonth) {
+    const data = {
+        "January": [
+            { month: "January", amount: "$500", category: "Food" },
+            { month: "January", amount: "$200", category: "Transport" },
+        ],
+        "February": [
+            { month: "February", amount: "$600", category: "Groceries" },
+            { month: "February", amount: "$100", category: "Entertainment" },
+        ]
+    };
+
+    const tableBody = document.getElementById("monthly-table-body");
+    tableBody.innerHTML = ""; // Clear previous data
+
+    if (data[selectedMonth]) {
+        data[selectedMonth].forEach(row => {
+            const tr = document.createElement("tr");
+            tr.innerHTML = `<td>${row.month}</td><td>${row.amount}</td><td>${row.category}</td>`;
+            tableBody.appendChild(tr);
+        });
     }
 }
