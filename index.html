@@ -4,14 +4,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Budget Dashboard</title>
+    <style>
+        /* Styling for the modal */
+        #form-modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.4);
+            overflow: auto;
+        }
+        #form-iframe {
+            width: 80%;
+            height: 80%;
+            margin: 5% auto;
+            display: block;
+        }
+    </style>
 </head>
 <body>
-    <div>
-        <button id="monthButton">Month</button>
-        <button id="weekButton">Week</button>
-        <button id="enterTransactionButton">Enter Transaction</button>
-        <button id="enterBudgetButton">Enter Budget</button>
-    </div>
+    <!-- Buttons for selecting Month, Week, etc. -->
+    <button id="monthButton">Month</button>
+    <button id="weekButton">Week</button>
+    <button id="enterTransactionButton">Enter Transaction</button>
+    <button id="enterBudgetButton">Enter Budget</button>
 
     <!-- Monthly Dropdown -->
     <div id="monthly-budget" style="display:none;">
@@ -27,37 +46,25 @@
         </select>
     </div>
 
-    <!-- Table for displaying Month data -->
-    <table id="monthly-table" style="display:none;">
-        <thead>
-            <tr>
-                <th>Date</th>
-                <th>Amount</th>
-                <th>Category</th>
-            </tr>
-        </thead>
-        <tbody id="monthly-table-body">
-            <!-- Data rows will be dynamically inserted here -->
-        </tbody>
-    </table>
+    <!-- Table to display monthly data -->
+    <div id="monthly-table" style="display:none;">
+        <h3>Monthly Data</h3>
+        <table id="monthlyDataTable">
+            <tr><th>Month</th><th>Data 1</th><th>Data 2</th></tr>
+        </table>
+    </div>
 
-    <!-- Table for displaying Week data -->
-    <table id="weekly-table" style="display:none;">
-        <thead>
-            <tr>
-                <th>Date</th>
-                <th>Amount</th>
-                <th>Category</th>
-            </tr>
-        </thead>
-        <tbody id="weekly-table-body">
-            <!-- Data rows will be dynamically inserted here -->
-        </tbody>
-    </table>
+    <!-- Table to display weekly data -->
+    <div id="weekly-table" style="display:none;">
+        <h3>Weekly Data</h3>
+        <table id="weeklyDataTable">
+            <tr><th>Week</th><th>Data 1</th><th>Data 2</th></tr>
+        </table>
+    </div>
 
-    <!-- Modal for displaying Google Forms -->
-    <div id="form-modal" style="display:none;">
-        <iframe id="form-iframe" width="100%" height="500px" src="" frameborder="0"></iframe>
+    <!-- Modal for Google Forms -->
+    <div id="form-modal">
+        <iframe id="form-iframe" src="" frameborder="0"></iframe>
     </div>
 
     <script src="script.js"></script>

@@ -3,11 +3,13 @@ window.addEventListener('DOMContentLoaded', (event) => {
     document.getElementById("monthButton").addEventListener("click", function () {
         console.log("Month button clicked");
         toggleView("monthly"); // Show the Monthly Budget section
+        loadDropdown("month"); // Load the dropdown options for month
     });
 
     document.getElementById("weekButton").addEventListener("click", function () {
         console.log("Week button clicked");
         toggleView("weekly"); // Show the Weekly Budget section
+        loadDropdown("week"); // Load the dropdown options for week
     });
 
     // Event listener for Enter Transaction button
@@ -43,6 +45,57 @@ function toggleView(view) {
         document.getElementById("weekly-budget").style.display = "block";
         document.getElementById("weekly-table").style.display = "block";
     }
+}
+
+// Function to load the dropdown options based on the selected view (month or week)
+function loadDropdown(type) {
+    console.log(`Loading ${type} dropdown`);
+    let dropdown;
+    let range;
+    let sheet;
+
+    // Select the dropdown element based on type
+    if (type === "month") {
+        dropdown = document.getElementById("monthlyDropdown");
+        sheet = "month";
+        range = "A3:A19"; // Range for months
+    } else if (type === "week") {
+        dropdown = document.getElementById("weeklyDropdown");
+        sheet = "Entry";
+        range = "A3:A19"; // Range for weeks
+    }
+
+    // Clear existing options
+    dropdown.innerHTML = "<option value=''>Select a " + type.charAt(0).toUpperCase() + type.slice(1) + "</option>";
+
+    // Fetch data from the Google Sheet
+    fetchDataFromSheet(sheet, range).then(data => {
+        // Populate the dropdown with options
+        data.forEach(item => {
+            const option = document.createElement("option");
+            option.value = item[0]; // Assuming the first column contains the value
+            option.text = item[0];  // Display the value in the dropdown
+            dropdown.appendChild(option);
+        });
+    }).catch(error => {
+        console.error("Error fetching data:", error);
+    });
+}
+
+// Function to fetch data from the Google Sheet
+function fetchDataFromSheet(sheetName, range) {
+    return new Promise((resolve, reject) => {
+        const url = `https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec?sheet=${sheetName}&range=${range}`;
+
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                resolve(data.values); // Resolve with the sheet data
+            })
+            .catch(error => {
+                reject(error); // Reject if there is an error
+            });
+    });
 }
 
 // Function to open a Google Form in a modal
