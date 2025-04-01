@@ -11,12 +11,18 @@ document.addEventListener("DOMContentLoaded", function () {
   
     let currentTitle = ""; // Stores the title (Monthly or Weekly Budget)
   
-    // Predefined dropdown options
+    // Web App URL (replace with your deployed URL)
+    const webAppUrl = "https://script.google.com/macros/s/AKfycbz6IL4D6Ygo71QrnfiG3E3sJtgajs-NqmI8byaKaElKyq1r3toxVdSpKsUBfKAH4_k/exec?url=";
+  
+    // Google Forms URLs
+    const budgetFormUrl = "https://docs.google.com/forms/d/e/1FAIpQLSfA3abugtBWzuurMlBeMjVjjVDld645j_MGsS08xOORC041hw/viewform";
+    const transactionFormUrl = "https://docs.google.com/forms/d/e/1FAIpQLSd7E722SXLcVjUcSzASMeYfW1ZjRC-HVBp8EpSctxMrqJPAUw/viewform";
+  
     const monthOptions = [
       "March", "April", "May", "June", "July", "August",
       "September", "October", "November", "December", "January", "February"
     ];
-    
+  
     const weekOptions = [
       "3/7/2025", "3/14/2025", "3/21/2025", "3/28/2025", "4/4/2025", "4/11/2025",
       "4/18/2025", "4/25/2025", "5/2/2025", "5/9/2025", "5/16/2025", "5/23/2025",
@@ -39,35 +45,33 @@ document.addEventListener("DOMContentLoaded", function () {
         dropdown.appendChild(opt);
       });
       dropdownContainer.style.display = "block";
-      currentTitle = title; // Set title based on the button pressed
+      currentTitle = title;
     }
   
     monthBtn.addEventListener("click", function () {
       updateDropdown(monthOptions, "Monthly Budget");
       dropdown.dataset.sheet = "Month";
-      formContainer.style.display = "none";  // Hide form container when switching to budget data
+      formContainer.style.display = "none";
     });
   
     weekBtn.addEventListener("click", function () {
       updateDropdown(weekOptions, "Weekly Budget");
       dropdown.dataset.sheet = "Entry";
-      formContainer.style.display = "none";  // Hide form container when switching to budget data
+      formContainer.style.display = "none";
     });
   
     budgetBtn.addEventListener("click", function () {
-      // Embed the Google Form for budget within the dashboard
       formContainer.style.display = "block";
-      formContainer.innerHTML = `<iframe src="https://docs.google.com/forms/d/e/1FAIpQLSfA3abugtBWzuurMlBeMjVjjVDld645j_MGsS08xOORC041hw/viewform" width="100%" height="800px" frameborder="0">Loading...</iframe>`;
-      dropdownContainer.style.display = "none";  // Hide dropdown when form is shown
-      dataContainer.innerHTML = ""; // Clear data container
+      formContainer.innerHTML = `<iframe src="${webAppUrl + encodeURIComponent(budgetFormUrl)}" width="100%" height="800px" frameborder="0"></iframe>`;
+      dropdownContainer.style.display = "none";
+      dataContainer.innerHTML = "";
     });
   
     transactionBtn.addEventListener("click", function () {
-      // Embed the Google Form for transaction within the dashboard
       formContainer.style.display = "block";
-      formContainer.innerHTML = `<iframe src="https://docs.google.com/forms/d/e/1FAIpQLSd7E722SXLcVjUcSzASMeYfW1ZjRC-HVBp8EpSctxMrqJPAUw/viewform" width="100%" height="800px" frameborder="0">Loading...</iframe>`;
-      dropdownContainer.style.display = "none";  // Hide dropdown when form is shown
-      dataContainer.innerHTML = ""; // Clear data container
+      formContainer.innerHTML = `<iframe src="${webAppUrl + encodeURIComponent(transactionFormUrl)}" width="100%" height="800px" frameborder="0"></iframe>`;
+      dropdownContainer.style.display = "none";
+      dataContainer.innerHTML = "";
     });
   
     dropdown.addEventListener("change", function () {
@@ -79,8 +83,7 @@ document.addEventListener("DOMContentLoaded", function () {
         .then(response => response.json())
         .then(data => {
           dataContainer.innerHTML = `<h2>${currentTitle}</h2>`;
-          
-          // Create a table
+  
           let table = `<table border="1" cellpadding="5" cellspacing="0">
                         <thead>
                           <tr>
@@ -92,16 +95,11 @@ document.addEventListener("DOMContentLoaded", function () {
                         <tbody>`;
   
           data.forEach(row => {
-            let cost = parseFloat(row[1]);
-            let budget = parseFloat(row[2]);
+            let cost = parseFloat(row[1]) || 0;
+            let budget = parseFloat(row[2]) || 0;
   
-            // Ensure that zero is displayed as "0"
-            if (isNaN(cost)) cost = 0;
-            if (isNaN(budget)) budget = 0;
-  
-            // Format cost and budget as currency, ensuring 0 is displayed as "0"
-            cost = cost === 0 ? '0' : cost.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
-            budget = budget === 0 ? '0' : budget.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+            cost = cost.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+            budget = budget.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
   
             table += `<tr>
                         <td>${row[0]}</td>
