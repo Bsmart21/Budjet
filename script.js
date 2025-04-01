@@ -21,19 +21,19 @@ document.addEventListener("DOMContentLoaded", function () {
     ]);
  
     // Add event listeners for button clicks
-    document.getElementById("monthButton").addEventListener("click", function () {
+    document.getElementById("monthButton")?.addEventListener("click", function () {
         toggleView("monthly"); // Show the Monthly Budget section
     });
  
-    document.getElementById("weekButton").addEventListener("click", function () {
+    document.getElementById("weekButton")?.addEventListener("click", function () {
         toggleView("weekly"); // Show the Weekly Budget section
     });
  
-    document.getElementById("enterTransactionButton").addEventListener("click", function () {
+    document.getElementById("enterTransactionButton")?.addEventListener("click", function () {
         toggleView("transaction"); // Show Enter Transaction form
     });
  
-    document.getElementById("enterBudgetButton").addEventListener("click", function () {
+    document.getElementById("enterBudgetButton")?.addEventListener("click", function () {
         toggleView("budgets"); // Show Enter Budgets form
     });
  
