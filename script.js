@@ -35,6 +35,15 @@ window.onload = function () {
         }
     });
 
+    // Event listeners for Enter Transaction and Enter Budget buttons
+    document.getElementById("enterTransactionButton").addEventListener("click", function () {
+        openForm("https://docs.google.com/forms/d/e/1FAIpQLSd7E722SXLcVjUcSzASMeYfW1ZjRC-HVBp8EpSctxMrqJPAUw/viewform");
+    });
+
+    document.getElementById("enterBudgetButton").addEventListener("click", function () {
+        openForm("https://docs.google.com/forms/d/e/1FAIpQLSfA3abugtBWzuurMlBeMjVjjVDld645j_MGsS08xOORC041hw/viewform");
+    });
+
     // Initially hide all sections except the first selected one
     toggleView("monthly");
 };
@@ -75,7 +84,7 @@ function toggleView(view) {
 // Fetch data from Google Sheets for the selected month
 function fetchMonthData(month) {
     // Call the Google Apps Script to fetch data for the selected month
-    const url = `https://script.google.com/macros/s/AKfycby2UEVzu_w3Ee0eVv2ITcB2a4NHS0HL2tb9PAiJboqTvLpGevt4jgmry5TK2I8FviNt/exec?sheet=Month&month=${month}`;
+    const url = `https://script.google.com/macros/s/AKfycbzZyNoPwtpsySGTdmW4l9ZgclcVBH33zzms4X5LOUzhRMRyr5_W_tPKnNPZXj2I3sn0/exec?sheet=Month&month=${month}`;
     
     // Fetch data from the Google Apps Script
     fetch(url)
@@ -137,3 +146,21 @@ function displayWeekData(data) {
         tableBody.innerHTML = "<tr><td colspan='3'>No data available for this week.</td></tr>";
     }
 }
+
+// Function to open a Google Form in a modal
+function openForm(formUrl) {
+    const modal = document.getElementById("form-modal");
+    const iframe = document.getElementById("form-iframe");
+    iframe.src = formUrl; // Set the src of the iframe to the Google Form URL
+    modal.style.display = "block"; // Show the modal with the iframe
+}
+
+// Close the modal when clicking outside the form
+window.onclick = function (event) {
+    const modal = document.getElementById("form-modal");
+    if (event.target === modal) {
+        modal.style.display = "none"; // Hide the modal
+        const iframe = document.getElementById("form-iframe");
+        iframe.src = ""; // Reset the iframe src
+    }
+};
