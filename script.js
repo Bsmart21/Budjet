@@ -52,11 +52,11 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   
     budgetBtn.addEventListener("click", function () {
-      window.open("https://docs.google.com/forms/d/e/1FAIpQLSfA3abugtBWzuurMlBeMjVjjVDld645j_MGsS08xOORC041hw/viewform", "_blank");
+      window.location.href = "https://docs.google.com/forms/d/e/1FAIpQLSfA3abugtBWzuurMlBeMjVjjVDld645j_MGsS08xOORC041hw/viewform";  // Opens within the window
     });
   
     transactionBtn.addEventListener("click", function () {
-      window.open("https://docs.google.com/forms/d/e/1FAIpQLSd7E722SXLcVjUcSzASMeYfW1ZjRC-HVBp8EpSctxMrqJPAUw/viewform", "_blank");
+      window.location.href = "https://docs.google.com/forms/d/e/1FAIpQLSd7E722SXLcVjUcSzASMeYfW1ZjRC-HVBp8EpSctxMrqJPAUw/viewform";  // Opens within the window
     });
   
     dropdown.addEventListener("change", function () {
@@ -67,31 +67,5 @@ document.addEventListener("DOMContentLoaded", function () {
       fetch(`https://script.google.com/macros/s/AKfycbz6IL4D6Ygo71QrnfiG3E3sJtgajs-NqmI8byaKaElKyq1r3toxVdSpKsUBfKAH4_k/exec?sheet=${sheetName}&value=${selectedValue}`)
         .then(response => response.json())
         .then(data => {
-          dataContainer.innerHTML = `<h2>${currentTitle}</h2>`;
-          
-          // Create a table
-          let table = `<table border="1" cellpadding="5" cellspacing="0">
-                        <thead>
-                          <tr>
-                            <th>Budget Item</th>
-                            <th>Cost</th>
-                            <th>Budget</th>
-                          </tr>
-                        </thead>
-                        <tbody>`;
-  
-          data.forEach(row => {
-            table += `<tr>
-                        <td>${row[0]}</td>
-                        <td>${row[1]}</td>
-                        <td>${row[2]}</td>
-                      </tr>`;
-          });
-  
-          table += `</tbody></table>`;
-          dataContainer.innerHTML += table;
-        })
-        .catch(error => console.error("Error fetching data:", error));
-    });
-  });
+          dataContainer.innerHTML =
   
