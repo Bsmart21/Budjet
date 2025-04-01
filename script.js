@@ -3,13 +3,13 @@ window.addEventListener('DOMContentLoaded', (event) => {
     document.getElementById("monthButton").addEventListener("click", function () {
         console.log("Month button clicked");
         toggleView("monthly"); // Show the Monthly Budget section
-        loadDropdown("week"); // Load the dropdown options for week (now week dates)
+        loadDropdown("month"); // Load the dropdown options for week (now week dates)
     });
 
     document.getElementById("weekButton").addEventListener("click", function () {
         console.log("Week button clicked");
         toggleView("weekly"); // Show the Weekly Budget section
-        loadDropdown("month"); // Load the dropdown options for month (now months)
+        loadDropdown("week"); // Load the dropdown options for month (now months)
     });
 
     // Event listener for Enter Transaction button
