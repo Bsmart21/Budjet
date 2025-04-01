@@ -55,7 +55,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   
     budgetBtn.addEventListener("click", function () {
-      // Embed the Google Form within the dashboard
+      // Embed the Google Form for budget within the dashboard
       formContainer.style.display = "block";
       formContainer.innerHTML = `<iframe src="https://docs.google.com/forms/d/e/1FAIpQLSfA3abugtBWzuurMlBeMjVjjVDld645j_MGsS08xOORC041hw/viewform" width="100%" height="800px" frameborder="0">Loading...</iframe>`;
       dropdownContainer.style.display = "none";  // Hide dropdown when form is shown
@@ -63,7 +63,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   
     transactionBtn.addEventListener("click", function () {
-      // Embed the Google Form within the dashboard
+      // Embed the Google Form for transaction within the dashboard
       formContainer.style.display = "block";
       formContainer.innerHTML = `<iframe src="https://docs.google.com/forms/d/e/1FAIpQLSd7E722SXLcVjUcSzASMeYfW1ZjRC-HVBp8EpSctxMrqJPAUw/viewform" width="100%" height="800px" frameborder="0">Loading...</iframe>`;
       dropdownContainer.style.display = "none";  // Hide dropdown when form is shown
@@ -95,9 +95,13 @@ document.addEventListener("DOMContentLoaded", function () {
             let cost = parseFloat(row[1]);
             let budget = parseFloat(row[2]);
   
-            // Format cost and budget as currency
-            cost = cost ? cost.toLocaleString('en-US', { style: 'currency', currency: 'USD' }) : '';
-            budget = budget ? budget.toLocaleString('en-US', { style: 'currency', currency: 'USD' }) : '';
+            // Ensure that zero is displayed as "0"
+            if (isNaN(cost)) cost = 0;
+            if (isNaN(budget)) budget = 0;
+  
+            // Format cost and budget as currency, ensuring 0 is displayed as "0"
+            cost = cost === 0 ? '0' : cost.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+            budget = budget === 0 ? '0' : budget.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
   
             table += `<tr>
                         <td>${row[0]}</td>
