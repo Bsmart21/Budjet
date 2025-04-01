@@ -1,22 +1,31 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Budget Dashboard</title>
-</head>
-<body>
-  <button id="monthBtn">Month</button>
-  <button id="weekBtn">Week</button>
-  <button id="budgetBtn">Enter Budget</button>
-  <button id="transactionBtn">Enter Transaction</button>
-
-  <div id="dropdownContainer" style="display:none;">
-    <select id="dropdown"></select>
-  </div>
-
-  <div id="dataContainer"></div>
-
-  <script src="script.js"></script>
-</body>
-</html>
+function doGet(e) {
+    if (!e || !e.parameter) {
+      return ContentService.createTextOutput("No parameters received").setMimeType(ContentService.MimeType.TEXT);
+    }
+  
+    var sheetName = e.parameter.sheet;
+    var value = e.parameter.value;
+  
+    if (!sheetName || !value) {
+      return ContentService.createTextOutput("Missing parameters").setMimeType(ContentService.MimeType.TEXT);
+    }
+  
+    var ss = SpreadsheetApp.openById("1nIyZG9sNpiq4PLA8L_LC_3q0dmkEY8QXuknWbozmoas");
+    var sheet = ss.getSheetByName(sheetName);
+    if (!sheet) {
+      return ContentService.createTextOutput("Sheet not found").setMimeType(ContentService.MimeType.TEXT);
+    }
+  
+    // Update cell B1
+    sheet.getRange("B1").setValue(value);
+  
+    // Get data from A3:C19
+    var data = sheet.getRange("A3:C19").getValues();
+  
+    // Convert empty cells to zero for formatting
+    data = data.map(row => row.map(cell => cell === "" ? 0 : cell));
+  
+    return ContentService.createTextOutput(JSON.stringify(data))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+  
